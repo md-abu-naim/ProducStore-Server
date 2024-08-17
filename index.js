@@ -32,11 +32,22 @@ async function run() {
 
         // get all products
         app.get('/products', async (req, res) => {
-            
+            const search = req.query.search
+            const sort = req.query.sort
             const page = parseInt(req.query.page) - 1
             const size = parseInt(req.query.size)
 
             
+            let options = {}
+            if (sort === 'asc') {
+                options.sort = { price: -1 }
+            }
+            else if (sort === 'dsc') {
+                options.sort = { price: 1 }
+            }
+            else if (sort === 'date') {
+                options.sort = { date: -1 }
+            }
 
             const result = await productsCollection.find(query).sort(options.sort).skip(page * size).limit(size).toArray()
             res.send(result)
