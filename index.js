@@ -33,11 +33,21 @@ async function run() {
         // get all products
         app.get('/products', async (req, res) => {
             const search = req.query.search
+            const filter = req.query.filter
+            const brand = req.query.brand
             const sort = req.query.sort
             const page = parseInt(req.query.page) - 1
             const size = parseInt(req.query.size)
 
-            
+            let query = {}
+            if (filter) query = { category: filter }
+
+            if (brand) query = { brand: brand }
+
+            if (search) {
+                query.name = { $regex: `${search}`, $options: 'i' }
+            }
+
             let options = {}
             if (sort === 'asc') {
                 options.sort = { price: -1 }
