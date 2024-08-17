@@ -32,36 +32,18 @@ async function run() {
 
         // get all products
         app.get('/products', async (req, res) => {
-           
+            
+            const page = parseInt(req.query.page) - 1
+            const size = parseInt(req.query.size)
+
+            
 
             const result = await productsCollection.find(query).sort(options.sort).skip(page * size).limit(size).toArray()
             res.send(result)
         })
 
 
-        // get product count
-        app.get('/products-count', async (req, res) => {
-            const filter = req.query.filter
-            const brand = req.query.brand
-            const minPrice = parseFloat(req.query.minPrice)
-            const maxPrice = parseFloat(req.query.maxPrice)
-
-            let query = {}
-
-            if (filter) query = { category: filter }
-            if (brand) query = { brand: brand }
-            if (minPrice && maxPrice) {
-                query.price = { $gte: minPrice, $lte: maxPrice }
-            }
-            const count = await productsCollection.countDocuments(query)
-            res.send({ count })
-        })
-
-        app.post('/products', async (req, res) => {
-            const painting = req.body
-            const result = await productsCollection.insertOne(painting)
-            res.send(result)
-        })
+        
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
