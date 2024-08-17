@@ -36,6 +36,8 @@ async function run() {
             const filter = req.query.filter
             const brand = req.query.brand
             const sort = req.query.sort
+            const minPrice = parseFloat(req.query.minPrice)
+            const maxPrice = parseFloat(req.query.maxPrice)
             const page = parseInt(req.query.page) - 1
             const size = parseInt(req.query.size)
 
@@ -46,6 +48,10 @@ async function run() {
 
             if (search) {
                 query.name = { $regex: `${search}`, $options: 'i' }
+            }
+
+            if (minPrice && maxPrice) {
+                query.price = { $gte: minPrice, $lte: maxPrice }
             }
 
             let options = {}
