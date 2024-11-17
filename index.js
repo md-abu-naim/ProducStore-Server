@@ -61,8 +61,8 @@ async function run() {
             else if (sort === 'dsc') {
                 options.sort = { price: 1 }
             }
-            else if (sort === 'date') {
-                options.sort = { date: -1 }
+            else if (sort === 'Popularity') {
+                options.sort = { rating: -1 }
             }
 
             const result = await productsCollection.find(query).sort(options.sort).skip(page * size).limit(size).toArray()
@@ -94,8 +94,6 @@ async function run() {
             res.send(result)
         })
 
-        // Send a ping to confirm a successful connection
-        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
